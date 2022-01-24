@@ -22,13 +22,14 @@ export class UserIP extends LitElement {
     // Java or other Object Oriented Programming Language
     // so for this one, we're storing a reference to the API endpoint
     // so that if it ever changed it would be easier to update
-    this.ipLookUp = 'https://ip-fast.com/api/ip/?format=json&location=False';
+    this.ipLookUp = 'https://ip-fast.com/api/ip/?format=json&location=True';
   }
 
   // properties that you wish to use as data in HTML, CSS, and the updated life-cycle
   static get properties() {
     return {
       ip: { type: String, reflect: true },
+      location: { type: String, reflect: true },
     };
   }
 
@@ -86,8 +87,7 @@ export class UserIP extends LitElement {
   }
 
   /**
-   * Async, so run this code in order though in this example
-   * it'll run regardless since we're not doing other actions
+   This section provides the ip and location of the user
    */
   async updateUserIP() {
     return fetch(this.ipLookUp)
@@ -99,15 +99,12 @@ export class UserIP extends LitElement {
       })
       .then(data => {
         this.ip = data.ip;
+        this.location = `  ${data.city} ${data.country}`;
         return data;
       });
   }
 
-  // styles that ONLY APPLY TO THIS CODE BLOCK
-  // this capability is called ShadowRoot and
-  // it ensures that the code in the render() method
-  // will be the only thing to get these styles applied
-  // certain things can go in but the styles can't bleed out
+  // I believe this section is the design of the web page
   static get styles() {
     return [
       css`
@@ -134,11 +131,16 @@ export class UserIP extends LitElement {
     ];
   }
 
-  // this serves very little purpose but at least we're rendering the info
+  // the rendering info outputs the ip address as well as the location of the current ip address
   render() {
     return html` <ul>
-      <li><strong class="ipaddress">IP address:</strong> ${this.ip}</li>
-      <li></li>
+      <li><strong class="ipaddress">ip address:</strong> ${this.ip}</li>
+
+      <li>
+        <strong class="ipaddress"> location of the current ip address:</strong>
+        ${this.location}
+      </li>
+      }
     </ul>`;
   }
 }
